@@ -25,6 +25,9 @@ public partial class main : Node
 		GetNode<Timer>("ScoreTimer").Stop();
 
 		GetNode<hud>("HUD").ShowGameOver();
+
+		GetNode<AudioStreamPlayer>("Music").Stop();
+    	GetNode<AudioStreamPlayer>("DeathSound").Play();
 	}
 
 	public void NewGame()
@@ -40,6 +43,12 @@ public partial class main : Node
 		var hud = GetNode<hud>("HUD");
 		hud.UpdateScore(_score);
 		hud.ShowMessage("Get Ready!");
+
+		// Note that for calling Godot-provided methods with strings,
+		// we have to use the original Godot snake_case name.
+		GetTree().CallGroup("mobs", Node.MethodName.QueueFree);
+
+		GetNode<AudioStreamPlayer>("Music").Play();
 	}
 
 	private void OnScoreTimerTimeout()
